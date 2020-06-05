@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block bread %}
+<li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+{% endblock bread %}
+<!--  -->
+{% block body %}
+<div class="content-section p-4 cute_border">
+    <h1 style="background-color: var(--jumby);" class="text-center p-3">You haven't permission to do that - <a class="btn-link" href="https://en.wikipedia.org/wiki/HTTP_403">Error (403)</a></h1>
+    <p class="lead">Not sure what you're trying to do, but you aren't allowed to do it.</p>
+</div>
+<!-- Endblock -->
+{% endblock body %}

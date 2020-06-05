@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block bread %}
+<li class="breadcrumb-item" aria-current="page"><a href="{{url_for('reviews.review_list')}}">Reviews</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+{% endblock bread %}
+<!--  -->
+{% block body %}
+<section class="content-section p-5 cute_border shadow">
+    <div class="d-flex justify-content-center">
+        <article id="UserInfo" class="">
+            <img class="medium_picc mb-3 shadow" src="{{url_for('static', filename='profile_pictures/'+ user.profile_picture)}}" alt="{{user.username}}">
+        </article>
+    </div>
+    <h2 class="account-heading text-center mb-3">Author: {{user.username}}</h2>
+    <hr class="my-2"> {% if user.role == "Admin" %}
+    <article id="ReviewsInfo" class="mt-3">
+        <h3 class="account-heading mb-2">Reviews posted:</h3>
+        {% for review in reviews %}
+        <ul class="mb-3">
+            <li class="mb-0"><a href="{{url_for('reviews.full_review', review_id=review.id)}}">{{review.title}}</a></li>
+        </ul>
+        {% endfor %}
+    </article>
+    {% endif %}
+    <article>
+        <h3 class="account-heading mb-3">Memes posted:</h3>
+        {% for meme in memes %}
+        <ul class="mb-0">
+            <li class="mb-0"><a href="{{url_for('memes.full_meme', meme_id=meme.id)}}">{{meme.caption}}</a></li>
+        </ul>
+        {% endfor %}
+    </article>
+</section>
+
+{% endblock body %}

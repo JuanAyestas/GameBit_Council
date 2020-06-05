@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block bread %}
+<li class="breadcrumb-item" aria-current="page"><a href="{{url_for('memes.meme_list')}}">Memes</a></li>
+<li class="breadcrumb-item active" aria-current="page">Meme #{{meme.id}}</li>
+{% endblock bread %}
+<!--  -->
+{% block body %}
+<section class="container d-flex flex-column bigger_space">
+    <article class="mb-3">
+        <a class="btn btn-secondary btn-block" href="{{url_for('memes.meme_list')}}">Back to Memes</a>
+    </article>
+    <article class="alert alert-warning" role="alert">
+        <p class="lead mb-0">Some pictures may look blurry and stretched when they're displayed in full screen, but that's due to the picture resolution. I apologize.</p>
+    </article>
+    <article class="cute_border_for_pictures p-2 mb-3">
+        <figcaption class="text-center mb-2">{{meme.caption}}</figcaption>
+        <figure class="d-flex justify-content-center">
+            <img class="cuter_border w-75" src="{{url_for('static', filename='/memes/' + meme.meme) }}" alt="{{meme.caption}}">
+        </figure>
+        {% if meme.author == current_user or current_user.role == "Admin" %}
+        <button type="button" class="btn btn-danger mt-3 btn-block" data-toggle="modal" data-target="#deleteModal">Delete Picture</button>
+        <!--  -->
+        {% endif %}
+    </article>
+</section>
+<!-- start modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete the picture?</h5>
+                <button id="x_symbol" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="lead">This can't be unmade, are you sure you wanna proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form action="{{url_for('memes.delete_meme', meme_id=meme.id)}}" method="POST">
+                    <input class="btn btn-danger float-right" type="submit" value="Delete picture">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Endblock -->
+{% endblock body %}

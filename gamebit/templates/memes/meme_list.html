@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block bread %}
+<li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+{% if current_user.is_authenticated %}
+<li class="breadcrumb-item" aria-current="page"><a href="{{url_for('memes.new_meme')}}">Upload a meme</a></li>
+{% endif %} {% endblock bread %}
+<!--  -->
+{% block body %}
+<section class="jumbotron cuter_border shadow p-3">
+    <article class="text-center">
+        <h1 class="display-6">Have a Laugh!</h1>
+        <p class="lead">Why not relax a bit seeing memes? You can always read our reviews later.</p>
+    </article>
+</section>
+<section class="row row-cols-1 row-cols-md-2">
+    {% for meme in memes.items %}
+    <div class="col mb-2">
+        <div class="cute_border_for_pictures mb-3 p-2 shadow">
+            <figcaption class="text-center">{{meme.caption}}</figcaption>
+            <figure class="d-flex justify-content-center">
+                <a class="" href="{{url_for('memes.full_meme', meme_id=meme.id)}}">
+                    <img class="cuter_border w-100" src="{{url_for('static', filename='/memes/' + meme.meme) }}" alt="{{meme.caption}}">
+                </a>
+            </figure>
+            <hr class="my-2">
+            <div class="flex_article justify-content-start">
+                <a href="{{url_for('reviews.user_review', username=meme.author.username)}}">{{meme.author.username}}</a>
+                <article class="margin_left">
+                    <small class="text_muted">{{meme.date_posted.strftime("%Y-%m-%d")}}</small>
+                    <br>
+                    <small class="text_muted">To check out the full meme, click on the picture</small>
+                </article>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+<!-- start modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete the picture?</h5>
+                <button id="x_symbol" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="lead">This can't be unmade, are you sure you wanna proceed?</p>
+            </div>
+            {% for meme in memes.items %}
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form action="{{url_for('memes.delete_meme', meme_id=meme.id)}}" method="POST">
+                    <input class="btn btn-danger float-right" type="submit" value="Delete picture">
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- endfor -->
+<nav aria-label="Page Navigation">
+    {% for page_num in memes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    <ul class="pagination justify-content-center">
+        {% if page_num %}
+        <li class="page-item">
+            <a class="page-link" href="{{url_for('memes.meme_list', page=1)}}">Back to start</a>
+        </li>
+        {% if memes.page == page_num %}
+        <li class="page-item active">
+            <a class="page-link" href="{{url_for('memes.meme_list', page=page_num)}}">{{page_num}}</a>
+        </li>
+        <!--  -->
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="{{url_for('memes.meme_list', page=page_num)}}">{{page_num}}</a>
+        </li>
+        <!-- endif -->
+        {% endif %}
+        <!-- endif -->
+        {% else %}
+        <!-- endif -->
+        <li>
+            ...
+        </li>
+        {% endif %}
+    </ul>
+    <!-- endfor -->
+    {% endfor %}
+</nav>
+<!-- Endblock -->
+{% endblock body %}

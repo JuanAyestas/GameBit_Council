@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block bread %}
+<li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+{% endblock bread %}
+<!--  -->
+{% block body %}
+<div class="content-section p-4 cute_border">
+    <h1 style="background-color: var(--jumby);" class="text-center p-3">Page Not Found - <a class="btn-link" href="https://en.wikipedia.org/wiki/HTTP_404">Error (404)</a></h1>
+    <p class="lead">That page doesn't exist. Check if you typed in the right address and try again, or go back.</p>
+</div>
+<!-- Endblock -->
+{% endblock body %}

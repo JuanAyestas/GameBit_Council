@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block bread %}
+<li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+{% endblock bread %}
+<!--  -->
+{% block body %}
+<section class="jumbotron cuter_border shadow p-3">
+    <article class="text-center">
+        <h1 class="display-6">Reviews</h1>
+        <p class="lead">Check out or latest reviewed games!</p>
+    </article>
+</section>
+<!-- start if -->
+{% for review in reviews.items %}
+<!-- for -->
+<section class="review_article p-3 shadow mb-4">
+    <div class="d-flex">
+        <figure class="profile_pic_container m-0">
+            <a href="{{url_for('reviews.user_review', username=review.author.username)}}"><img class="small_profile_pic" src="{{url_for('static', filename='profile_pictures/'+ review.author.profile_picture)}}" alt="{{review.author.username}}"></a>
+        </figure>
+        <article class="margin_left">
+            <hr style="margin-top: 0 !important;" class="my-2">
+            <a href="{{url_for('reviews.user_review', username=review.author.username)}}" class="mr-2">{{review.author.username}}</a>
+            <small class="text_muted">{{review.date_posted.strftime("%Y-%m-%d")}}</small>
+            <br>
+            <small class="text_muted">To check out the full review, click on the title</small>
+            <hr class="my-2">
+        </article>
+    </div>
+    <hr class="my-2">
+    <article class="m-auto text-center">
+        <h2 class="article-title"><a href="{{ url_for('reviews.full_review', review_id=review.id)}}">{{ review.title }}</a></h2>
+        <hr class="my-2 w-50">
+        <h5 class="mb-1">Available for: </h5>
+        <h4 class="article-title"><a href="{{ url_for('reviews.full_review', review_id=review.id)}}">{{ review.platform }}</a></h4>
+        <hr class="my-2 w-50">
+    </article>
+    <figure class="text-center thumbnail_container">
+        <img class="cuter_border shadow thumbnail_picture carou_size" src="{{url_for('static', filename='/thumbnail/' + review.thumbnail) }}" alt="...">
+    </figure>
+    <article>
+        <hr class="my-2">
+        <h4 class="jumbito"> General Info:</h4>
+        <p class="spaces">{{review.summary}}</p>
+    </article>
+</section>
+{% endfor %}
+<!-- endfor -->
+<nav aria-label="Page Navigation">
+    {% for page_num in reviews.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    <ul class="pagination justify-content-center">
+        {% if page_num %}
+        <li class="page-item">
+            <a class="page-link" href="{{url_for('reviews.review_list', page=1)}}">Back to start</a>
+        </li>
+        {% if reviews.page == page_num %}
+        <li class="page-item active">
+            <a class="page-link" href="{{url_for('reviews.review_list', page=page_num)}}">{{page_num}}</a>
+        </li>
+        <!--  -->
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="{{url_for('reviews.review_list', page=page_num)}}">{{page_num}}</a>
+        </li>
+        <!-- endif -->
+        {% endif %}
+        <!-- endif -->
+        {% else %}
+        <!-- endif -->
+        <li>
+            ...
+        </li>
+        {% endif %}
+    </ul>
+    <!-- endfor -->
+    {% endfor %}
+</nav>
+<!-- Endblock -->
+{% endblock body %}

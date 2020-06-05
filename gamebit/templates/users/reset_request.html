@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block bread %}
+<li class="breadcrumb-item" aria-current="page"><a href="{{url_for('users.login')}}">Login</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+{% endblock bread %}
+<!--  -->
+{% block body %}
+<form id="regForm" class="review_article" action="" method="POST">
+    {{ form.hidden_tag() }}
+    <fieldset class="">
+        <legend>{{legend}}</legend>
+        <hr class="my-2 mb-3">
+        <section id="LogIn">
+            <article id="MailForm" class="form-group">
+                {{ form.email.label(class="form-control-label")}}
+                <!--  -->
+                {% if form.email.errors %}
+                <!--  -->
+                {{ form.email(class="form-control form-control-lg is-invalid")}}
+                <div class="invalid-feedback">
+                    <!--  -->
+                    {% for error in form.email.errors %}
+                    <span>{{ error }}</span>
+                    <!--  -->
+                    {% endfor %}
+                </div>
+                {% else %}
+                <!-- input -->
+                <div tabindex="1">
+                    {{ form.email(class="form-control form-control-lg")}}
+                </div>
+                <!--  -->
+                {% endif %}
+            </article>
+            <article id="SubmitForm">
+                {{ form.submit(class="btn btn-primary btn-block") }}
+            </article>
+        </section>
+    </fieldset>
+</form>
+<!-- Endblock -->
+{% endblock body %}

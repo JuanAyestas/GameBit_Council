@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+<!-- extended from -->
+<section id="bread">
+    {% block bread %}
+    <li class="breadcrumb-item" aria-current="page"><a href="{{url_for('reviews.review_list')}}">Reviews</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+    {% if current_user.is_authenticated %}
+    <!--  -->
+    {% if review.author == current_user %}
+    <li class="breadcrumb-item" aria-current="page"><a href="{{url_for('reviews.picture_upload', review_id=review.id)}}">Upload Pictures</a></li>
+    <li class="breadcrumb-item" aria-current="page"><a href="{{url_for('reviews.review_gallery', review_id=review.id)}}">Gallery</a></li>
+    {% else %}
+    <li class="breadcrumb-item" aria-current="page"><a href="{{url_for('reviews.review_gallery', review_id=review.id)}}">Gallery</a></li>
+    {% endif %}
+    <!--  -->
+    {% else %}
+    <li class="breadcrumb-item" aria-current="page"><a href="{{url_for('reviews.review_gallery', review_id=review.id)}}">Gallery</a></li>
+    {% endif %}
+    <!--  -->
+    {% endblock bread %}
+</section>
+{% block body %}
+<section class="review_article p-3 mb-4 shadow">
+    <article id="ReviewInfo" class="m-auto text-center">
+        <h1 class="article-title text-center bigger_space">
+            <a href="{{ url_for('reviews.full_review', review_id=review.id)}}">{{ review.title }}</a>
+        </h1>
+        <h5 class="mb-1">Available for: </h5>
+        <h3 class=""><a href="{{ url_for('reviews.full_review', review_id=review.id)}}">{{ review.platform }}</a></h3>
+        <hr class="my-2 w-50">
+    </article>
+    <article id="Carrousel" class="d-flex justify-content-center">
+        <div id="carouselExampleControls" class="carousel slide carou_size" data-ride="carousel" data-interval="4000">
+            <div class="carousel-inner cuter_border shadow">
+                <figure class="carousel-item active mb-0">
+                    <img class="d-block w-100 cuter_border" src="{{url_for('static', filename='/thumbnail/' + review.thumbnail) }}" alt="...">
+                </figure>
+                <!-- for -->
+                {% for picture in pictures %}
+                <figure class="carousel-item mb-0">
+                    <img class="d-block w-100 cuter_border" src="{{url_for('static', filename='/review_pictures/' + picture.picture_file) }}" alt="...">
+                </figure>
+                <!-- endfor -->
+                {% endfor %}
+            </div>
+            <article class="d-flex justify-content-center mt-3">
+                <a class="btn btn-primary btn-block" href="{{url_for('reviews.review_gallery', review_id=review.id)}}">Gallery</a>
+            </article>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </article>
+    <article id="ReviewSummary">
+        <hr class="my-2">
+        <h4 class="jumbito spaces">General Info:</h4>
+        <p class="spaces">{{review.summary}}</p>
+    </article>
+    <article id="ReviewContent">
+        <hr class="my-2">
+        <h4 class="jumbito spaces">Review:</h4>
+        <p class="spaces">{{review.content}}</p>
+    </article>
+    <!--  -->
+    {% if review.author == current_user %}
+    <hr class="my-2">
+    <article id="ManageButtons" class="d-flex justify-content-around flex_container">
+        <a href="{{url_for('reviews.edit_review', review_id=review.id)}}" class="btn btn-primary btn-block w-25 mr-2 mt-0 flex_button">Update Review</a>
+        <a href="{{url_for('reviews.picture_upload', review_id=review.id)}}" class="btn btn-success btn-block w-25 ml-2 mr-2 mt-0 flex_button">Upload Pictures</a>
+        <button type="button" class="btn btn-danger btn-block w-25 ml-2 mt-0 flex_button" data-toggle="modal" data-target="#deleteModal">Delete Review</button>
+    </article>
+    {% endif %}
+    <hr class="my-2">
+    <section id="AuthorInfo" class="d-flex justify-content-start">
+        <figure class="small_pic_container m-0">
+            <a href="{{url_for('reviews.user_review', username=review.author.username)}}"><img class="small_profile_pic" src="{{url_for('static', filename='profile_pictures/'+ review.author.profile_picture)}}" alt="{{review.author.username}}"></a>
+        </figure>
+        <article id="ReviewFooter" class="margin_left">
+            <hr class="my-2">
+            <a href="{{url_for('reviews.user_review', username=review.author.username)}}" class="mr-2">{{review.author.username}}</a>
+            <small class="text_muted">{{review.date_posted.strftime("%Y-%m-%d")}}</small>
+            <br>
+            <small class="text_muted">To check more of the author, click their picture</small>
+            <hr class="my-2">
+        </article>
+    </section>
+</section>
+<!-- start modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete the review?</h5>
+                <button id="x_symbol" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <p class="lead">This can't be unmade, are you sure you wanna proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form action="{{url_for('reviews.delete_review', review_id=review.id)}}" method="POST">
+                    <input class="btn btn-danger float-right" type="submit" value="Delete review">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Endblock -->
+{% endblock body %}

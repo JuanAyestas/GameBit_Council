@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block bread %}
+<li class="breadcrumb-item" aria-current="page"><a href="{{url_for('users.login')}}">Login (Mail)</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{title}} (Username)</li>
+{% endblock bread %}
+<!--  -->
+{% block body %}
+<form id="regForm" class="review_article" action="" method="POST">
+    {{ form.hidden_tag() }}
+    <fieldset class="">
+        <legend>{{legend}}</legend>
+        <hr class="my-2 mb-3">
+        <section>
+            <article id="UserForm" class="form-group">
+                {{ form.username.label(class="form-control-label")}}
+                <!--  -->
+                {% if form.username.errors %}
+                <!--  -->
+                {{ form.username(class="form-control form-control-lg is-invalid")}}
+                <div class="invalid-feedback">
+                    <!--  -->
+                    {% for error in form.username.errors %}
+                    <span>{{ error }}</span>
+                    <!--  -->
+                    {% endfor %}
+                </div>
+                {% else %}
+                <!-- input -->
+                <div tabindex="1">
+                    {{ form.username(class="form-control form-control-lg")}}
+                </div>
+                <!--  -->
+                {% endif %}
+            </article>
+            <article id="PassForm" class="form-group">
+                {{ form.password.label(class="form-control-label")}}
+                <!--  -->
+                {% if form.password.errors %}
+                <!--  -->
+                {{ form.password(class="form-control form-control-lg is-invalid")}}
+                <div class="invalid-feedback">
+                    <!--  -->
+                    {% for error in form.password.errors %}
+                    <span>{{ error }}</span>
+                    <!--  -->
+                    {% endfor %}
+                </div>
+                {% else %}
+                <!-- input -->
+                {{ form.password(class="form-control form-control-lg")}}
+                <!--  -->
+                {% endif %}
+            </article>
+            <article id="RememberForm" class="form-check mb-3">
+                {{ form.remember(class="form-check-input") }}
+                <!--  -->
+                {{ form.remember.label(class="form-check-label") }}?
+            </article>
+            <article id="SubmitForm">
+                {{ form.submit(class="btn btn-primary btn-block") }}
+                <p class="text-center mt-2 mb-2">----------- or -----------</p>
+                <a class="btn btn-secondary btn-block" href="{{url_for('users.login')}}">Log in with your Email</a>
+            </article>
+            <article class="pt-3">
+                <p class="p-2 mb-0">Forgot your password?</p>
+                <a class="btn btn-link" href="{{url_for('users.reset_request')}}">Reset Password</a>
+            </article>
+        </section>
+    </fieldset>
+</form>
+<!-- Endblock -->
+{% endblock body %}

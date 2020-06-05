@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block body %}
+<section class="jumbotron cuter_border shadow">
+    <article id="PageSalute" class="text-center">
+        <h1 class="display-4"><a href="https://www.facebook.com/GameBitCouncil/">GameBit Council</a></h1>
+        <h2>Hello, world!</h2>
+    </article>
+    <hr class="my-4">
+    <article id="PageInfo">
+        <p class="lead">Welcome to our page where we are interested in providing a place for people to interact and talk about games they want to talk about. </p>
+        <p class="lead">We also post our opinions on different games from a variety of platforms (Xbox, PlayStation, PC, and other platforms)</p>
+    </article>
+</section>
+<section class="row row-cols-1 row-cols-md-2">
+    <div class="col mb-3">
+        <section id="Card1" class="card text-center cuter_border shadow  p-1">
+            <figure class="mb-0">
+                <img class="card-img-top cuter_border" src="{{url_for('static', filename='home_pictures/About us collage.jpg')}}" alt="GameBit Home">
+            </figure>
+            <article class="card-body">
+                <h5 class="card-title">What's GameBit Council?</h5>
+                <p class="card-text">Click the button down bellow to know a little bit more about us and who we are!</p>
+                <a href="{{url_for('main.about')}}" class="btn btn-primary btn-block">About us</a>
+            </article>
+        </section>
+    </div>
+    <div class="col mb-3">
+        <section id="Card2" class="card text-center cuter_border shadow p-1">
+            <article id="carouselExampleSlidesOnly" class="carousel slide cuter_border" data-ride="carousel" data-interval="2000">
+                <div class="carousel-inner">
+                    <figure class="carousel-item active mb-0">
+                        <img class="d-block w-100 cuter_border" src="{{url_for('static', filename='home_pictures/Review collage 1.jpg')}}" alt="First slide">
+                    </figure>
+                    <figure class="carousel-item mb-0">
+                        <img class="d-block w-100 cuter_border" src="{{url_for('static', filename='home_pictures/Review collage 2.jpg')}}" alt="Second slide">
+                    </figure>
+                    <figure class="carousel-item mb-0">
+                        <img class="d-block w-100 cuter_border" src="{{url_for('static', filename='home_pictures/Review collage 3.jpg')}}" alt="Third slide">
+                    </figure>
+                    <figure class="carousel-item mb-0">
+                        <img class="d-block w-100 cuter_border" src="{{url_for('static', filename='home_pictures/Review collage 4.jpg')}}" alt="Fourth slide">
+                    </figure>
+                </div>
+            </article>
+            <article class="card-body">
+                <h5 class="card-title">Reviews</h5>
+                <p class="card-text">The game's we've reviewed so far. we'll be adding some more soon!</p>
+                <a href="{{url_for('reviews.review_list')}}" class="btn btn-primary btn-block">Check our reviews</a>
+            </article>
+        </section>
+    </div>
+    <div class="col mb-3">
+        <section id="Card3" class="card text-center cuter_border shadow  p-1">
+            <figure class="mb-0">
+                <img class="card-img-top cuter_border" src="{{url_for('static', filename='home_pictures/Memes collage 2.jpg')}}" alt="GameBit Home">
+            </figure>
+            <article class="card-body">
+                <h5 class="card-title">Memes</h5>
+                <p class="card-text">Having a rough day and you just wanna laugh? Head on to our memes section!</p>
+                <a href="{{url_for('memes.meme_list')}}" class="btn btn-primary btn-block">Meme gallery</a>
+            </article>
+        </section>
+    </div>
+    {% if current_user.is_authenticated and current_user.role =="Admin" %}
+    <div class="col mb-3">
+        <section id="Card4" class="card text-center cuter_border shadow p-1">
+            <figure class="mb-0">
+                <img class="card-img-top cuter_border" src="{{url_for('static', filename='home_pictures/Collage for new.jpg')}}" alt="GameBit for New">
+            </figure>
+            <article class="card-body">
+                <h5 class="card-title">Write a new Review!</h5>
+                <p class="card-text">Type a new review for our list! Don't forget to double check if the game you're reviewing was reviewed already.</p>
+                <a href="{{url_for('reviews.new_review')}}" class="btn btn-primary btn-block">New Review</a>
+            </article>
+        </section>
+    </div>
+    {% endif %}
+    <div class="col mb-3">
+        <section id="Card5" class="card text-center cuter_border shadow p-1">
+            <figure class="mb-0">
+                <img class="card-img-top cuter_border" src="{{url_for('static', filename='home_pictures/Memes collage.jpg')}}" alt="GameBit for New">
+            </figure>
+            <article class="card-body">
+                {% if current_user.is_authenticated %}
+                <h5 class="card-title">Post a new meme!</h5>
+                <p class="card-text">Maybe you'll make someone laugh today with some nonsense, so go ahead!</p>
+                <a href="{{url_for('memes.new_meme')}}" class="btn btn-primary btn-block">New Meme</a>
+                <!---->
+                {% else %}
+                <h5 class="card-title">You gotta log in first</h5>
+                <p class="card-text">Before interacting with the page, like, posting memes, you've to log in, don't forget!</p>
+                <a href="{{url_for('users.login')}}" class="btn btn-primary btn-block">Log in</a>
+                <!---->
+                {% endif %}
+            </article>
+        </section>
+    </div>
+</section>
+<!-- Endblock -->
+{% endblock body %}

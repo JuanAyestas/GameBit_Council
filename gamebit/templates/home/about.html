@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block bread %}
+<li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+{% endblock bread %}
+<!--  -->
+{% block body %}
+<section class="jumbotron shadow cute_border">
+    <article id="AboutTitle">
+        <h1 class="display-4 text-center mb-4"><a href="{{url_for('main.home')}}">GameBit Council:</a></h1>
+    </article>
+    <article id="AboutInfo">
+        <p>Welcome to our page where we are interested in providing a place for people to interact and talk about games they want to talk about. We also post our opinions on different games from a variety of platforms (Xbox, Playstation, PC, and other platforms)</p>
+        <p>We first started as a <a href="https://www.facebook.com/GameBitCouncil/">Facebook page</a> and we have a decent, still a bit small, community that's growing everyday and that motivate us to keep going!
+        </p>
+        <p>This webpage will be focused just to the review part, in the Facebook page we do both, meme-ing around, but also reviewing and sharing our opinions with all of you.
+        </p>
+        <div class="alert alert-warning" role="alert">
+            <p class="lead mb-0">We do not claim ownership on any of the pictures displayed in the webpage. All the credit goes to their respective artists.
+            </p>
+        </div>
+        <div class="alert alert-danger" role="alert">
+            <p class="lead mb-0">Regarding to memes, we try to keep them as respectful as possible, because, well, it's a meme.</p>
+            <p class="text-center lead mb-0">To know more, check <a class="btn-link" href="{{url_for('main.rules')}}"><strong>the rules section</strong></a></p>
+        </div>
+        </p>
+    </article>
+    <article>
+        <h3>GameBit Staff:</h3>
+        <ul>
+            {% for user in users %} {% if user.role == "Admin" %}
+            <li>
+                <a class="lead" href="{{url_for('reviews.user_review', username=user.username)}}">{{user.username}}</a>
+            </li>
+            {% endif %} {% endfor %}
+        </ul>
+    </article>
+    <article id="SocialMedia">
+        <h3>Social Media:</h3>
+        <div class="d-flex justify-content-center">
+            <a href="https://www.facebook.com/GameBitCouncil/"><i class="fab fa-facebook-square big_icon"></i></a>
+        </div>
+    </article>
+</section>
+<!-- Endblock -->
+{% endblock body %}

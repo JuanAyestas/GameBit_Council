@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block bread %}
+<li class="breadcrumb-item" aria-current="page"><a href="{{url_for('reviews.review_list')}}">Reviews</a></li>
+<li class="breadcrumb-item" aria-current="page"><a href="{{url_for('reviews.full_review', review_id=review.id)}}">{{review.title}}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+{% endblock bread %}
+<!--  -->
+{% block body %}
+<form id="regForm" class="review_article bigger_space" action="" method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <fieldset class="">
+        <legend class="">{{legend}}</legend>
+        <hr class="my-2 mb-3">
+        <section>
+            <article id="UserPic" class="form-group">
+                {{ form.pictures.label(class="")}}
+                <!--  -->
+                {{ form.pictures(multiple="multiple", class="form-control-file form-control-lg pl-0 pr-0")}}
+                <!--  -->
+                {% if form.pictures.errors %}
+                <!--  -->
+                {% for error in form.pictures.errors %}
+                <span class="text-danger">{{ error }}</span><br>
+                <!--  -->
+                {% endfor %}
+                <!--  -->
+                {% endif %}
+            </article>
+            <article>
+                {{ form.submit(class="btn btn-success btn-block", id="submitBtn") }}
+            </article>
+        </section>
+    </fieldset>
+</form>
+<!-- Endblock -->
+{% endblock body %}

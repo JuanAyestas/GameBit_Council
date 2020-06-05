@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block bread %}
+<li class="breadcrumb-item" aria-current="page"><a href="{{url_for('memes.meme_list')}}">Memes</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+{% endblock bread %} {% block body %}
+<div class="alert alert-danger" role="alert">
+    <p class="lead mb-0">Keep in mind, if a meme goes against our rules, it'll be deleted. Check the <a class=" btn-link" href="{{url_for('main.rules')}}">rule list</a>, so you'll be free of guilt
+    </p>
+</div>
+<form id="regForm" class="review_article bigger_space" action="" method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <fieldset class="">
+        <legend class="">{{legend}}</legend>
+        <hr class="my-2 mb-3">
+        <section id="MemeForm">
+            <article class="form-group">
+                {{ form.caption.label(class="form-control-label")}}
+                <!--  -->
+                {% if form.caption.errors %}
+                <!--  -->
+                {{ form.caption(class="form-control form-control-lg is-invalid")}}
+                <div class="invalid-feedback">
+                    {% for error in form.caption.errors %}
+                    <span>{{ error }}</span>
+                    <!--  -->
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div tabindex="1">
+                    {{ form.caption(class="form-control form-control-lg")}}
+                    <small class="form-text text_muted">The cation must be, at least 3 characters long.</small>
+                </div>
+                {% endif %}
+            </article>
+            <article id="Meme" class="form-group">
+                {{ form.meme.label(class="form-control-label")}}
+                <!--  -->
+                {{ form.meme(class="form-control-file form-control-lg pl-0 pr-0")}}
+                <!--  -->
+                {% if form.meme.errors %}
+                <!--  -->
+                {% for error in form.meme.errors %}
+                <span class="text-danger">{{ error }}</span><br>
+                <!--  -->
+                {% endfor %}
+                <!--  -->
+                {% endif %}
+            </article>
+            <article>
+                {{ form.submit(class="btn btn-success btn-block", id="submitBtn") }}
+            </article>
+        </section>
+    </fieldset>
+</form>
+<!-- Endblock -->
+{% endblock body %}

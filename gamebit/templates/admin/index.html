@@ -1,0 +1,150 @@
+{% extends 'admin/master.html' %}
+<!-- extended from -->
+{% block head_meta %}
+<meta charset="UTF-8">
+<link rel="icon" type="image/jpg" href="{{url_for('static', filename='logo.jpg')}}">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!---->
+{% endblock head_meta %}
+<!---->
+{% block title %} GameBit Staff - Admin {% endblock title %}
+<!---->
+{% block head_css %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='/fontawesome/css/all.css')}}">
+<!---->
+{% endblock head_css %}
+<!---->
+{% block page_body %}
+<header class="site-header">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a href="{{url_for('main.home')}}"><img class="small_pic" src="{{url_for('static', filename='logo.jpg')}}" alt="GameBit-Council Logo"></a>
+            <a class="navbar-brand" href="{{url_for('main.home')}}">GameBit - {{current_user.role}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarsExample03">
+                <div class="navbar-nav mr-auto">
+                    {% if current_user.username == "Kuro Cato" or current_user.username == "NecroSatan" %}
+                    <a class="nav-item nav-link mt-1" href="/admin/user">Users</a>
+                    <a class="nav-item nav-link mt-1" href="/admin/review">Reviews</a>
+                    <a class="nav-item nav-link mt-1" href="/admin/meme">Memes</a>
+                    <!---->
+                    {% endif %}
+                    <div class="label_div" id="theme-change">
+                        <input type="checkbox" class="checkbox" id="checkbox-theme">
+                        <label for="checkbox-theme" class="label_check theme-change">
+                                <i class="fas fa-moon"></i>
+                                <i class="fas fa-sun"></i>
+                                <span class="ball"></span>
+                            </label>
+                    </div>
+                </div>
+                <div class="navbar-nav">
+                    {% if current_user.is_authenticated and current_user.role == "Admin"%}
+                    <a class="nav-item nav-link" href="{{url_for('users.account')}}">Account</a>
+                    <a class="nav-item nav-link" href="{{url_for('users.logout')}}">Log out</a>
+                    <!-- -->
+                    {% else %}
+                    <a class="nav-item nav-link" href="{{url_for('users.login')}}">Log in</a>
+                    <a class="nav-item nav-link" href="{{url_for('users.register')}}">Register</a>
+                    <!--  -->
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    <nav class="fixed_top bg-dark navbar-dark" aria-label="breadcrumb">
+        <div class="container">
+            <ol class="mb-0 breadcrumb p-0 pb-1">
+                <li class="breadcrumb-item" aria-current="page"><a href="{{url_for('main.home')}}">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page"><a href="{{url_for('users.account')}}">Account Info</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><a href="/admin">Management</a></li>
+                {% if current_user.username == "Kuro Cato" or current_user.username == "NecroSatan" %}
+                <li class="breadcrumb-item" aria-current="page"><a href="/admin/user">Users</a></li>
+                <li class="breadcrumb-item" aria-current="page"><a href="/admin/review">Reviews</a></li>
+                <li class="breadcrumb-item" aria-current="page"><a href="/admin/meme">Memes</a></li>
+                {% endif %}
+            </ol>
+        </div>
+    </nav>
+</header>
+<main class="container">
+    <section class="jumbotron cuter_border shadow">
+        <article id="PageSalute" class="text-center">
+            <h1 class="display-4"><a href="https://www.facebook.com/GameBitCouncil/">GameBit Council</a></h1>
+            <h2>Hello, fellow staff members!</h2>
+        </article>
+        <hr class="my-4">
+        <article id="PageInfo">
+            <p class="lead">If you can see this page, it means you're part of the GameBit staff! Hooray! It's basically a reminder page that certifies your permission and your role as a staff member.</p>
+            <p class="lead">As long as you've that role, you're allowed to post, edit and freely delete your <strong><em>Reviews</em></strong>, <strong><em>Memes</em></strong> and even your own <strong><em>User</em></strong></p>
+        </article>
+        <div class="alert alert-warning" role="alert">
+            <p class="lead mb-0">Just be careful when you post memes, or something, keep them the least offensive possible.</p>
+        </div>
+    </section>
+</main>
+<!---->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js " integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj " crossorigin="anonymous "></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js " integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo " crossorigin="anonymous "></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js " integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI " crossorigin="anonymous "></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blazy/1.8.2/blazy.min.js "></script>
+<script>
+    // lazy loading
+    var bLazy = new Blazy({
+        selector: 'img'
+    });
+</script>
+<script>
+    //determines if the user has a set theme
+    function detectColorScheme() {
+        var theme = "light"; //default to light
+
+        //local storage is used to override OS theme settings
+        if (localStorage.getItem("theme")) {
+            if (localStorage.getItem("theme") == "dark") {
+                var theme = "dark";
+            }
+        } else if (!window.matchMedia) {
+            //matchMedia method not supported
+            return false;
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            //OS theme setting detected as dark
+            var theme = "dark";
+        }
+
+        //dark theme preferred, set document with a `data-theme` attribute
+        if (theme == "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+        }
+    }
+    detectColorScheme();
+
+    //identify the toggle switch HTML element
+    const toggleSwitch = document.querySelector('#theme-change input[type="checkbox"]');
+
+    //function that changes the theme, and sets a localStorage variable to track the theme between page loads
+    function switchTheme(e) {
+        if (e.target.checked) {
+            localStorage.setItem('theme', 'dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
+            toggleSwitch.checked = true;
+        } else {
+            localStorage.setItem('theme', 'light');
+            document.documentElement.setAttribute('data-theme', 'light');
+            toggleSwitch.checked = false;
+        }
+    }
+
+    //listener for changing themes
+    toggleSwitch.addEventListener('change', switchTheme, false);
+
+    //pre-check the dark-theme checkbox if dark-theme is set
+    if (document.documentElement.getAttribute("data-theme") == "dark") {
+        toggleSwitch.checked = true;
+    }
+</script>
+{% endblock page_body %}

@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+<!-- extended from -->
+{% block bread %}
+<li class="breadcrumb-item active" aria-current="page">{{title}}</li>
+{% if current_user.is_authenticated and current_user.role == "Admin" %}
+<li class="breadcrumb-item" aria-current="page"><a href="/admin">Management</a></li>
+{% endif %}
+<!--  -->
+{% if current_user.is_authenticated and current_user.role == "Admin" and current_user.username == "Kuro Cato" %}
+<li class="breadcrumb-item" aria-current="page"><a href="/admin/user">Users</a></li>
+<li class="breadcrumb-item" aria-current="page"><a href="/admin/review">Reviews</a></li>
+<li class="breadcrumb-item" aria-current="page"><a href="/admin/meme">Memes</a></li>
+{% endif %} {% endblock bread %}
+<!--  -->
+{% block body %}
+<div class="content-section p-3 cute_border">
+    <section class="d-flex justify-content-around">
+        <article id="UserInfo" class="user_info">
+            <img class="medium_picc mb-3 mt-3" src="{{url_for('static', filename='profile_pictures/' + current_user.profile_picture)}}" alt="{{current_user.username}}">
+            <h2 class="account-heading text-center">{{current_user.role}}: {{current_user.username}}</h2>
+        </article>
+        <!--  -->
+        {% if current_user.is_authenticated and current_user.role == "Admin" %}
+        <div class="vertical_line"></div>
+        <article id="UserReviews">
+            <h4 class="account-heading mt-3">Reviews posted:</h4>
+            {% for review in reviews %}
+            <ul class="mb-0">
+                <li class="mb-0"><a href="{{url_for('reviews.full_review', review_id=review.id)}}">{{review.title}}</a></li>
+            </ul>
+            {% endfor %}
+        </article>
+        {% endif %}
+    </section>
+    <!-- Form -->
+    <form id="regForm" class="" action="" method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <hr class="my-2">
+        <fieldset class="">
+            <legend class="">{{legend}}</legend>
+            <hr class="my-2 mb-3">
+            <section id="UserForm">
+                <article id="UserName" class="form-group">
+                    {{ form.username.label(class="form-control-label")}}
+                    <!--  -->
+                    {% if form.username.errors %}
+                    <!--  -->
+                    {{ form.username(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        <!--  -->
+                        {% for error in form.username.errors %}
+                        <span>{{ error }}</span>
+                        <!--  -->
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- input -->
+                    <div tabindex="1">
+                        {{ form.username(class="form-control form-control-lg")}}
+                    </div>
+                    <!--  -->
+                    {% endif %}
+                </article>
+                <article id="UserMail" class="form-group">
+                    {{ form.email.label(class="form-control-label")}}
+                    <!--  -->
+                    {% if form.email.errors %}
+                    <!--  -->
+                    {{ form.email(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        <!--  -->
+                        {% for error in form.email.errors %}
+                        <span>{{ error }}</span>
+                        <!--  -->
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- input -->
+                    <div tabindex="2">
+                        {{ form.email(class="form-control form-control-lg")}}
+                    </div>
+                    <!--  -->
+                    {% endif %}
+                </article>
+                <article id="UserPic" class="form-group">
+                    {{ form.picture.label(class="")}}
+                    <!--  -->
+                    {{ form.picture(class="form-control-file form-control-lg pl-0 pr-0")}}
+                    <!--  -->
+                    {% if form.picture.errors %}
+                    <!--  -->
+                    {% for error in form.picture.errors %}
+                    <span class="text-danger">{{ error }}</span><br>
+                    <!--  -->
+                    {% endfor %}
+                    <!--  -->
+                    {% endif %}
+                </article>
+                <article id="UserFooter" class="form-group d-flex justify-content-between flex_container">
+                    <button type="button" class="btn btn-danger m-1 btn-block mr-4 flex_button" data-toggle="modal" data-target="#deleteModal">Delete Account</button>
+                    <!--  -->
+                    {{ form.submit(class="btn btn-success btn-block m-1 ml-4 flex_button") }}
+                </article>
+            </section>
+        </fieldset>
+    </form>
+    <!-- start modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete account?</h5>
+                    <button id="x_symbol" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="lead">This can't be unmade, are you sure you wanna proceed?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <form action="{{url_for('users.delete_account', user_id=current_user.id)}}" method="POST">
+                        <input class="btn btn-danger float-right" type="submit" value="Delete account">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Endblock -->
+{% endblock body %}
