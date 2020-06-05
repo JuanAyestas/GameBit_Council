@@ -7,27 +7,30 @@
 {% endblock bread %}
 <!--  -->
 {% block body %}
-
+<article class="alert alert-warning mt-3" role="alert">
+    <p class="mb-0">Some pictures may look blurry and stretched when they're displayed, but that's due to the picture resolution. I apologize.</p>
+    <p class="mb-0">We do not claim ownership on any of the pictures displayed. All the credit goes to their respective artists.</p>
+</article>
 <section class="d-flex flex-column">
-    <section class="alert alert-warning mt-3" role="alert">
-        <p class="mb-0">Some pictures may look blurry and stretched when they're displayed, but that's due to the picture resolution. I apologize.</p>
-        <p class="mb-0">We do not claim ownership on any of the pictures displayed. All the credit goes to their respective artists.</p>
-    </section>
-    <figure class="cute_border_for_pictures p-2 mt-3 shadow">
-        <a href="{{ url_for('reviews.full_thumbnail', review_id=review.id) }}">
-            <img class="cute_border_for_pictures w-100" src="{{ url_for('static', filename='/thumbnail/' + review.thumbnail) }}" alt="review.title">
-        </a>
-        <figcaption class="text-center">{{review.title}}</figcaption>
-        <figcaption class="text-center">Click the picture to open in fullscreen</figcaption>
-    </figure>
+    <article class="">
+        <figure class="cute_border_for_pictures p-3 mt-3 shadow">
+            <a href="{{ url_for('reviews.full_thumbnail', review_id=review.id) }}">
+                <img class="cute_border_for_pictures w-100" src="{{ url_for('static', filename='/thumbnail/' + review.thumbnail) }}" alt="review.title">
+            </a>
+            <figcaption class="text-center">{{review.title}}</figcaption>
+            <figcaption class="text-center">Click the picture to open in fullscreen</figcaption>
+        </figure>
+    </article>
     {% for picture in pictures %}
-    <figure class="cute_border_for_pictures p-2 mt-3 shadow">
-        <a href="{{url_for('reviews.full_picture', picture_id=picture.id, review_id=review.id)}}">
-            <img class="cute_border_for_pictures w-100" src="{{url_for('static', filename='/review_pictures/' + picture.picture_file) }}" alt="{{review.title}}">
-        </a>
-        <figcaption class="text-center">{{review.title}}</figcaption>
-        <figcaption class="text-center">Click the picture to open in fullscreen</figcaption>
-    </figure>
+    <article class="">
+        <figure class="cute_border_for_pictures p-3 mt-3 shadow">
+            <a href="{{url_for('reviews.full_picture', picture_id=picture.id, review_id=review.id)}}">
+                <img class="cute_border_for_pictures w-100" src="{{url_for('static', filename='/review_pictures/' + picture.picture_file) }}" alt="{{review.title}}">
+            </a>
+            <figcaption class="text-center">{{review.title}}</figcaption>
+            <figcaption class="text-center">Click the picture to open in fullscreen</figcaption>
+        </figure>
+    </article>
     {% endfor %}
 </section>
 <!-- Endblock -->
