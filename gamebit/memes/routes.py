@@ -46,16 +46,29 @@ def new_meme():
 @memes.route("/memes/delete/mem-<meme_id>", methods=["GET", "POST"])
 def delete_meme(meme_id):
   meme = Meme.query.get_or_404(meme_id)
-  if meme.author != current_user or current_user.role != "Admin":
+  if current_user == meme.author: 
+    path = current_app.config["MEME_PATH"] + meme.meme
+    try:
+      if os.path.isfile(path):
+        os.remove(path)
+    except OSError as e:
+      print("Error: {} : {}".format(
+          current_app.config["REVIEW_PIC_PATH"], e.strerror))
+    db.session.delete(meme)
+    db.session.commit()
+    flash('The picture has been deleted!', 'success')
+    return redirect(url_for('memes.meme_list'))
+  elif current_user.role == "Admin":
+    path = current_app.config["MEME_PATH"] + meme.meme
+    try:
+      if os.path.isfile(path):
+        os.remove(path)
+    except OSError as e:
+      print("Error: {} : {}".format(
+          current_app.config["REVIEW_PIC_PATH"], e.strerror))
+    db.session.delete(meme)
+    db.session.commit()
+    flash('The picture has been deleted!', 'success')
+    return redirect(url_for('memes.meme_list'))
+  else:
     abort(403)
-  path = current_app.config["MEME_PATH"] + meme.meme
-  try:
-    if os.path.isfile(path):
-      os.remove(path)
-  except OSError as e:
-    print("Error: {} : {}".format(
-        current_app.config["REVIEW_PIC_PATH"], e.strerror))
-  db.session.delete(meme)
-  db.session.commit()
-  flash('The picture has been deleted!', 'success')
-  return redirect(url_for('memes.meme_list'))

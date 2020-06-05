@@ -66,7 +66,7 @@ def picture_upload(review_id):
     db.session.commit()
     flash(f"Your pictures have been submitted!", "success")
     return redirect(url_for("reviews.full_review", review_id=review_id))
-  return render_template("reviews/reviews_upload.html", form=form, title="Upload Pictures",
+  return render_template("reviews/review_upload.html", form=form, title="Upload Pictures",
                          review=review, legend="Uploading pictures for: {}".format(review.title))
 
 
