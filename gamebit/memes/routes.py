@@ -30,10 +30,14 @@ def new_meme():
     form = MemeForm()
     if form.validate_on_submit():
       if form.meme.data:
-        posted_meme = save_picture_all(
-            form.meme.data, current_app.config["MEME_PATH"], (1280, 720))
-        meme = Meme(meme=posted_meme, caption=form.caption.data,
-                    author=current_user)
+        path = current_app.config["MEME_PATH"]
+        try:
+          if not os.path.exists(path):
+            os.mkdir(path)
+        except OSError:
+          print("Couldn't create the directory {}".format(path))
+        posted_meme = save_picture_all(form.meme.data, path, (1280, 720))
+        meme = Meme(meme=posted_meme, caption=form.caption.data, author=current_user)
         db.session.add(meme)
       db.session.commit()
       flash(f"Your meme has been submitted!", "success")
@@ -47,25 +51,23 @@ def new_meme():
 def delete_meme(meme_id):
   meme = Meme.query.get_or_404(meme_id)
   if current_user == meme.author: 
-    path = current_app.config["MEME_PATH"] + meme.meme
+    path_rem = current_app.config["MEME_PATH"] + meme.meme
     try:
-      if os.path.isfile(path):
-        os.remove(path)
+      if os.path.isfile(path_rem):
+        os.remove(path_rem)
     except OSError as e:
-      print("Error: {} : {}".format(
-          current_app.config["REVIEW_PIC_PATH"], e.strerror))
+      print("Error: {} : {}".format(path_rem, e.strerror))
     db.session.delete(meme)
     db.session.commit()
     flash('The picture has been deleted!', 'success')
     return redirect(url_for('memes.meme_list'))
   elif current_user.role == "Admin":
-    path = current_app.config["MEME_PATH"] + meme.meme
+    path_rem = current_app.config["MEME_PATH"] + meme.meme
     try:
-      if os.path.isfile(path):
-        os.remove(path)
+      if os.path.isfile(path_rem):
+        os.remove(path_rem)
     except OSError as e:
-      print("Error: {} : {}".format(
-          current_app.config["REVIEW_PIC_PATH"], e.strerror))
+      print("Error: {} : {}".format(path_rem, e.strerror))
     db.session.delete(meme)
     db.session.commit()
     flash('The picture has been deleted!', 'success')

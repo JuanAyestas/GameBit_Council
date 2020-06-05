@@ -1,3 +1,4 @@
+import os
 from flask import (Flask, Blueprint, redirect, url_for, render_template, 
                    flash, abort, request, current_app)
 from flask_login import current_user, login_user, logout_user, login_required
@@ -91,7 +92,13 @@ def account():
   form = UpdateAccountForm()
   if form.validate_on_submit():
     if form.picture.data:
-      picture_file = save_picture_all(form.picture.data, current_app.config["PROFILE_PIC_PATH"], (400, 225))
+      path = current_app.config["PROFILE_PIC_PATH"]
+      try:
+        if not os.path.exists(path):
+          os.mkdir(path)
+      except OSError:
+        print("Couldn't create the directory {}".format(path))
+      picture_file = save_picture_all(form.picture.data, path, (400, 225))
       current_user.profile_picture = picture_file
     current_user.username = form.username.data
     current_user.email = form.email.data
@@ -112,6 +119,12 @@ def delete_account(user_id):
   if user != current_user:
     abort(403)
   logout_user()
+  path_rem = current_app.config["PROFILE_PIC_PATH"] + user.profile_picture
+  try:
+    if os.path.isfile(path_rem):
+      os.remove(path_rem)
+  except OSError as e:
+    print("Error: {} : {}".format(path_rem, e.strerror))
   db.session.delete(user)
   db.session.commit()
   flash('The user has been deleted!', 'success')

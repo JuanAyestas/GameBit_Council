@@ -17,6 +17,7 @@ def review_list():
       Review.date_posted.desc()).paginate(page=page, per_page=4)
   return render_template("reviews/review_list.html", title="Reviews", reviews=reviews)
 
+
 @reviews.route("/reviews/summary/<string:username>")
 def user_review(username):
   user = User.query.filter_by(username=username).first_or_404()
@@ -38,16 +39,20 @@ def new_review():
   form = ReviewForm()
   if form.validate_on_submit():
     if form.thumbnail.data:
-      picture_thumbnail = save_picture_all(
-          form.thumbnail.data, current_app.config["THUMBNAIL_PIC_PATH"], (1280, 720))
+      path = current_app.config["THUMBNAIL_PIC_PATH"]
+      try:
+        if not os.path.exists(path):
+          os.mkdir(path)
+      except OSError:
+        print("Couldn't create the directory {}".format(path))
+      picture_thumbnail = save_picture_all(form.thumbnail.data, path, (1280, 720))
     review = Review(title=form.title.data, platform=form.platform.data, summary=form.summary.data,
                     content=form.content.data, author=current_user, thumbnail=picture_thumbnail)
     db.session.add(review)
     db.session.commit()
     flash(f"Your review has been submitted!", "success")
     return redirect(url_for("reviews.review_list"))
-  return render_template("reviews/new_review.html", title="New Review", form=form,
-                         legend="GameBit Review")
+  return render_template("reviews/new_review.html", title="New Review", form=form, legend="GameBit Review")
 
 
 @reviews.route("/reviews/rev-<int:review_id>/uploads", methods=["GET", "POST"])
@@ -59,8 +64,13 @@ def picture_upload(review_id):
   form = PictureReviewForm()
   if form.validate_on_submit and "pictures" in request.files:
     for picture in request.files.getlist("pictures"):
-      picture_file = save_picture_all(
-          picture, current_app.config["REVIEW_PIC_PATH"], (1600, 900))
+      path = current_app.config["REVIEW_PIC_PATH"]
+      try:
+        if not os.path.exists(path):
+          os.mkdir(path)
+      except OSError:
+        print("Couldn't create the directory {}".format(path))
+      picture_file = save_picture_all(picture, path, (1600, 900))
       picture = Picture(picture_file=picture_file, review_id=review_id)
       db.session.add(picture)
     db.session.commit()
@@ -105,15 +115,13 @@ def delete_picture(picture_id, review_id):
   if review.author != current_user and current_user.role != "Admin":
     abort(403)
   picture = Picture.query.get_or_404(picture_id)
-  path = current_app.config["REVIEW_PIC_PATH"] = "static/review_pictures/" + \
-      picture.picture_file
+  path_rem = current_app.config["REVIEW_PIC_PATH"] + picture.picture_file
   db.session.delete(picture)
   try:
-    if os.path.isfile(path):
-      os.remove(path)
+    if os.path.isfile(path_rem):
+      os.remove(path_rem)
   except OSError as e:
-    print("Error: {} : {}".format(
-        current_app.config["REVIEW_PIC_PATH"], e.strerror))
+    print("Error: {} : {}".format(path_rem, e.strerror))
   db.session.delete(picture)
   db.session.commit()
   flash('The picture has been deleted!', 'success')
@@ -129,16 +137,20 @@ def edit_review(review_id):
   form = UpdateReviewForm()
   if form.validate_on_submit():
     if form.thumbnail.data:
-      path = current_app.config["REVIEW_PIC_PATH"] = "static/thumbnail/" + \
-          review.thumbnail
+      path_rem = current_app.config["THUMBNAIL_PIC_PATH"]  + review.thumbnail
       try:
-        if os.path.isfile(path):
-          os.remove(path)
+        if os.path.isfile(path_rem):
+          os.remove(path_rem)
       except OSError as e:
-        print("Error: {} : {}".format(
-            current_app.config["REVIEW_PIC_PATH"], e.strerror))
-      picture_thumbnail = save_picture_all(
-          form.thumbnail.data, current_app.config["THUMBNAIL_PIC_PATH"], (1280, 720))
+        print("Error: {} : {}".format(path_rem, e.strerror))
+        
+      path = current_app.config["THUMBNAIL_PIC_PATH"]
+      try:
+        if not os.path.exists(path):
+          os.mkdir(path)
+      except OSError:
+        print("Couldn't create the directory {}".format(path))
+      picture_thumbnail = save_picture_all(form.thumbnail.data, path, (1280, 720))
       review.thumbnail = picture_thumbnail
     review.title = form.title.data
     review.platform = form.platform.data
@@ -165,15 +177,13 @@ def delete_review(review_id):
     abort(403)
   pictures = Picture.query.filter_by(review_id=review_id)
   for picture in pictures:
-    path = current_app.config["REVIEW_PIC_PATH"] = "static/review_pictures/" + \
-        picture.picture_file
+    path = current_app.config["REVIEW_PIC_PATH"] + picture.picture_file
     db.session.delete(picture)
     try:
       if os.path.isfile(path):
         os.remove(path)
     except OSError as e:
-      print("Error: {} : {}".format(
-          current_app.config["REVIEW_PIC_PATH"], e.strerror))
+      print("Error: {} : {}".format(current_app.config["REVIEW_PIC_PATH"], e.strerror))
   db.session.delete(review)
   db.session.commit()
   flash('The review has been deleted!', 'success')
