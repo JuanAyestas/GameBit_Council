@@ -17,15 +17,15 @@
     {% for meme in memes.items %}
     <div class="col mb-2">
         <div class="cute_border_for_pictures mb-3 p-2 shadow">
-            <figcaption class="text-center">{{meme.caption}}</figcaption>
+            <p class="text-center lead">{{meme.caption}}</p>
             <figure class="d-flex justify-content-center">
                 <a class="" href="{{url_for('memes.full_meme', meme_id=meme.id)}}">
                     <img class="cuter_border w-100" src="{{url_for('static', filename='/memes/' + meme.meme) }}" alt="{{meme.caption}}">
                 </a>
             </figure>
             <hr class="my-2">
-            <div class="flex_article justify-content-start">
-                <a href="{{url_for('reviews.user_review', username=meme.author.username)}}">{{meme.author.username}}</a>
+            <div class="flex_article justify-content-start p-2">
+                <a href="{{url_for('reviews.user_review', username=meme.author.username)}}">{{meme.author.username}}</a><i style="line-height: 1.5;" class="ml-1 fas fa-signature"></i>
                 <article class="margin_left">
                     <small class="text_muted">{{meme.date_posted.strftime("%Y-%m-%d")}}</small>
                     <br>

@@ -44,16 +44,16 @@
                         {% if current_user.is_authenticated %}
                         <!--  -->
                         {% if current_user.role == "Admin" %}
-                        <a class="nav-item nav-link" href="{{url_for('reviews.new_review')}}">Add a Review</a>
+                        <a class="nav-item nav-link" href="{{url_for('reviews.new_review')}}">New Review</a>
                         <!--  -->
                         {% endif %}
-                        <a class="nav-item nav-link" href="{{url_for('memes.new_meme')}}">Add a Meme</a>
-                        <a class="nav-item nav-link" href="{{url_for('users.account')}}">Account</a>
-                        <a class="nav-item nav-link" href="{{url_for('users.logout')}}">Log out</a>
+                        <a class="nav-item nav-link" href="{{url_for('memes.new_meme')}}">New Meme</a>
+                        <a class="nav-item nav-link" href="{{url_for('users.account')}}">Account <i class="fas fa-user"></i></a>
+                        <a class="nav-item nav-link" href="{{url_for('users.logout')}}">Log out <i class="fas fa-sign-out-alt"></i></a>
                         <!-- -->
                         {% else %}
-                        <a class="nav-item nav-link" href="{{url_for('users.login')}}">Log in</a>
-                        <a class="nav-item nav-link" href="{{url_for('users.register')}}">Register</a>
+                        <a class="nav-item nav-link" href="{{url_for('users.login')}}">Log in <i class="fas fa-sign-in-alt"></i></a>
+                        <a class="nav-item nav-link" href="{{url_for('users.register')}}">Register <i class="fas fa-user-plus"></i></a>
                         <!--  -->
                         {% endif %}
                     </div>
@@ -63,7 +63,7 @@
         <nav class="fixed_top bg-dark navbar-dark" aria-label="breadcrumb">
             <div class="container">
                 <ol class="mb-0 breadcrumb p-0 pb-1">
-                    <li class="breadcrumb-item" aria-current="page"><a href="{{url_for('main.home')}}">Home</a></li>
+                    <li class="breadcrumb-item" aria-current="page"><a href="{{url_for('main.home')}}"><i class="fas fa-home"></i></a></li>
                     <!--  -->
                     {% block bread %}
                     <!--  -->
