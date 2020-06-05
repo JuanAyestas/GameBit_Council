@@ -44,7 +44,7 @@ def new_meme():
       return redirect(url_for("memes.meme_list"))
   else:
     abort(403)
-  return render_template("memes/new_meme.html", title="New Meme", form=form, legend="Make someone laugh!")
+  return render_template("memes/new_meme.html", title="Upload a Meme", form=form, legend="Make someone laugh!")
 
 
 @memes.route("/memes/delete/mem-<meme_id>", methods=["GET", "POST"])

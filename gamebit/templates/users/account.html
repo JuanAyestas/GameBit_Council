@@ -13,7 +13,7 @@
 {% endif %} {% endblock bread %}
 <!--  -->
 {% block body %}
-<div class="content-section p-3 cute_border">
+<div class="content-section p-3 cute_border bigger_space">
     <section class="d-flex justify-content-around">
         <article id="UserInfo" class="user_info">
             <img class="medium_picc mb-3 mt-3" src="{{url_for('static', filename='profile_pictures/' + current_user.profile_picture)}}" alt="{{current_user.username}}">
