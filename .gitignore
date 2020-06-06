@@ -20,3 +20,7 @@ routes.cpython-38.pyc
 routes.cpython-38
 forms.cpython-38.pyc
 routes.cpython-38
+Pipfile
+Pipfile.lock
+.vscode
+settings.json
